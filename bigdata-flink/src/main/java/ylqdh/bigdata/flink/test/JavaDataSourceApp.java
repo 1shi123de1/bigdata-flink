@@ -17,8 +17,6 @@ import java.util.List;
 public class JavaDataSourceApp {
     public static void main(String[] args) {
 
-        String filePath = "file:///C:\\data\\cleandata";
-
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
 //     fromCollection(env);
