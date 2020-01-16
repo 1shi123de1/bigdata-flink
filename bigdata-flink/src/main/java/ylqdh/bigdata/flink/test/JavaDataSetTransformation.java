@@ -9,8 +9,6 @@ import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.util.Collector;
 
-import javax.lang.model.type.ExecutableType;
-import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.List;
 
