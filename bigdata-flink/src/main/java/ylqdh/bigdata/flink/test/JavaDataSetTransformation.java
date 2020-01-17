@@ -58,7 +58,7 @@ public class JavaDataSetTransformation {
             data.add(i);
         }
 
-        DataSet<Integer> dataSet = env.fromCollection(data);
+        DataSource<Integer> dataSet = env.fromCollection(data);
 
         dataSet.map(new MapFunction<Integer, Integer>() {
             public Integer map(Integer value) throws Exception {

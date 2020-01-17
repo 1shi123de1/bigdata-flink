@@ -8,6 +8,7 @@ import org.apache.flink.configuration.Configuration
   * @Date 2020/1/13 14:41
   *  Scala api 方式创建数据集
   */
+//noinspection ScalaDocUnknownTag
 object DataSourceApp {
   def main(args: Array[String]): Unit = {
     val env = ExecutionEnvironment.getExecutionEnvironment

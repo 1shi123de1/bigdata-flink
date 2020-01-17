@@ -8,6 +8,7 @@ import org.apache.flink.api.scala.ExecutionEnvironment
   * @Author ylqdh
   * @Date 2020/1/6 16:39
   */
+//noinspection ScalaDocUnknownTag
 object BatchFlinkScalaWC {
 
   def main(args: Array[String]): Unit = {

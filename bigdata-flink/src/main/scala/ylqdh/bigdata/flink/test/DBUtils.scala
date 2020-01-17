@@ -8,6 +8,7 @@ import scala.util.Random
   * @Author ylqdh
   * @Date 2020/1/15 9:51
   */
+//noinspection ScalaDocUnknownTag
 object DBUtils {
   def getConnection (): String = {
     new Random().nextInt(10) + ""

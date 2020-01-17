@@ -36,6 +36,7 @@ object CounterApp {
         getRuntimeContext.addAccumulator("counter-scala-app",counter)
       }
 
+      // map 操作的函数，在这里实现相关操作，如加1，添加字符串
       override def map(in: String):String = {
         counter.add(1)
         in
