@@ -49,7 +49,7 @@ object CounterApp {
     val jobResult = env.execute("CounterApp")
 
     // step3. 获取计数器
-    val counterNum = jobResult.getAccumulatorResult[Long]("counter-app")
+    val counterNum = jobResult.getAccumulatorResult[Long]("counter-scala-app")
 
     println("counter: " + counterNum)
 
