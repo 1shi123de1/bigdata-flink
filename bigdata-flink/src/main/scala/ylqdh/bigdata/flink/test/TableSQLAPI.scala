@@ -7,7 +7,8 @@ import org.apache.flink.types.Row
 
 /**
   * @ClassName TableSQLAPI
-  * @Description TODO
+  * @Description TODO 没有运行成功，参考官网完成例子
+  *             https://ci.apache.org/projects/flink/flink-docs-release-1.9/dev/table/common.html
   * @Author ylqdh
   * @Date 2020/2/24 17:43
   */
