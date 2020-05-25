@@ -23,21 +23,9 @@ public class JavaTest {
 //        baoWenConver();
 //        DeliverGroupMessage();
 //        lis();
-        List<String> list = new ArrayList<>();
-        list.add("a");
-        list.add("b");
-        list.add("A");
-        list.add("C");
 
-        Collections.sort(list, new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                char c1 = o1.toLowerCase().toCharArray()[0];
-                char c2 = o2.toLowerCase().toCharArray()[0];
-                return c1 - c2;
-            }
-        });
-        System.out.println(list);
+//        calforth();
+        dealData();
     }
 
     // 进制转换
@@ -478,4 +466,233 @@ public class JavaTest {
             System.out.println();
         }
     }
+
+    // 检查三种括号嵌套是否合法
+    public static boolean checkKuohao() {
+        Scanner scan = new Scanner(System.in);
+        String s = scan.nextLine();
+
+        boolean flag = false;
+        Stack<Character> stack = new Stack<>();
+        char c;
+
+        for (int i = 0; i < s.length(); i++ ){
+            c = s.charAt(i);
+
+            if (c == '(' || c == '[' || c == '{') {
+                stack.push(c);
+            } else if (c == ')') {
+                if (stack.peek() == '(') {
+                    stack.pop();
+                } else {
+                    return flag;
+                }
+            } else if (c == ']') {
+                if (stack.peek() == '[') {
+                    stack.pop();
+                } else {
+                    return flag;
+                }
+            } else if (c == '}') {
+                if (stack.peek() == '{') {
+                    stack.pop();
+                } else {
+                    return flag;
+                }
+            }
+        }
+
+        if (stack.isEmpty()) {
+            flag = true;
+        }
+
+        return flag;
+    }
+
+    // 四则运算 (都是整数，没有括号)
+    public static void calforth() {
+        Scanner scan = new Scanner(System.in);
+        String s = scan.nextLine();
+
+        Stack<Character> stackCal = new Stack<>();
+        Stack<Integer> stackNum = new Stack<>();
+
+        char c;
+        Pattern p = Pattern.compile("\\d");
+
+        for (int i = 0; i < s.length(); i++) {
+            c = s.charAt(i);
+            Matcher m = p.matcher(c+"");
+
+            // 是数字，入数字栈
+            if (m.find()) {
+                stackNum.push(Integer.parseInt(c+""));
+                continue;
+            }
+
+            // 是运算符,空的话直接进栈，否则判断优先级
+            if (stackCal.isEmpty() || first(c) > first(stackCal.peek())) {
+                stackCal.push(c);
+                continue;
+            } else {
+                // c的优先级 小于等于 栈顶元素的优先级
+                while (!stackCal.isEmpty()){
+                    int x = stackNum.pop();
+                    int y = stackNum.pop();
+                    int res = calone(y,stackCal.peek(),x);
+                    stackCal.pop();
+                    stackNum.push(res);
+
+                    if (stackCal.isEmpty() || first(c) > first(stackCal.peek())) {
+                        stackCal.push(c);
+                        break;
+                    }
+                }
+            }
+        }
+
+        // 字符串判断完，计算栈中剩下的运算符和数字
+        while (!stackCal.isEmpty()){
+            int x = stackNum.pop();
+            int y = stackNum.pop();
+            int res = calone(y,stackCal.peek(),x);
+            stackCal.pop();
+            stackNum.push(res);
+        }
+
+        // 最后，数字栈只剩最后一个元素，就是我们想要的结果
+        System.out.println(stackNum.pop());
+
+    }
+
+    public static int calone (int y,char c,int x) {
+        int res = 0;
+        if (c == '-') {
+            res = y - x;
+        } else if (c == '/') {
+            res = y / x;
+        } else if (c == '+') {
+            res = y + x;
+        } else if (c == '*') {
+            res = y * x;
+        }
+
+        return res;
+    }
+
+    // 判读四则运算优先级
+    public static int first (char c) {
+        int num ;
+        switch (c) {
+            case '+':
+                num = 1;
+                break;
+            case '-':
+                num = 1;
+                break;
+            case '*':
+                num = 2;
+                break;
+            case '/':
+                num = 2;
+                break;
+            default: num = 0;
+        }
+        return num;
+    }
+
+    // 两个有序链表合并成一个有序链表
+    public static LinkedList<Integer> concatLink (LinkedList<Integer> linkedList1,LinkedList<Integer> linkedList2) {
+        if (linkedList1 == null) {
+            return linkedList2;
+        }
+        if (linkedList2 == null) {
+            return linkedList1;
+        }
+
+        LinkedList<Integer> result = new LinkedList<>();
+
+        while (!linkedList1.isEmpty() && !linkedList2.isEmpty()) {
+            if (linkedList1.getFirst() < linkedList2.getFirst()) {
+                result.add(linkedList1.getFirst());
+                linkedList1.removeFirst();
+            } else {
+                result.add(linkedList2.getFirst());
+                linkedList2.removeFirst();
+            }
+        }
+
+        while (linkedList1.isEmpty() && !linkedList2.isEmpty()) {
+            result.add(linkedList2.getFirst());
+            linkedList2.removeFirst();
+        }
+
+        while (linkedList2.isEmpty() && !linkedList1.isEmpty()) {
+            result.add(linkedList1.getFirst());
+            linkedList1.removeFirst();
+        }
+
+        return result;
+    }
+
+    // 数据分类处理
+    public static void dealData () {
+        Scanner scan = new Scanner(System.in);
+
+        int il = scan.nextInt();
+        int[] I = new int[il];
+        for (int i = 0; i < il; i++) {
+            I[i] = scan.nextInt();
+        }
+
+        int rl = scan.nextInt();
+        Set<Integer> rset = new HashSet<>();
+        for (int i = 0; i < rl; i++) {
+            rset.add(scan.nextInt());
+        }
+        ArrayList<Integer> R = new ArrayList<>(rset);
+        Collections.sort(R);   // 对R数组进行排序
+
+        ArrayList<Integer> result = new ArrayList<>();
+        Map<Integer,Integer> subResult = new HashMap<>();
+        String rs;
+        String is;
+
+        for (int rVal : R) {
+            rs = rVal + "";
+
+            subResult.clear();
+            int sum = 0;
+            for (int j = 0 ; j < il; j++) {
+                is = I[j] + "";
+                if (is.indexOf(rs) >= 0) {
+                    // 能找到子串,存储位置和值
+                    subResult.put(j,I[j]);
+                    sum++;
+                }
+            }
+
+            // 当前的 R[i] 能在 I 数组中找到，把找到的结果放进result中
+            if (sum > 0) {
+                result.add(rVal);  // 先把R[i]的值加进去
+                result.add(sum);   // 再把找到的个数加进去
+                // 最后把找到的所有结果加进去,key是找到的数字在I数组中的索引值，value是对应的值,key需要排序
+                ArrayList<Integer> subList = new ArrayList<>(subResult.keySet());
+                Collections.sort(subList);
+                for (int key : subList) {
+                    result.add(key);
+                    result.add(subResult.get(key));
+                }
+            }
+        }
+
+        String sb = result.size() + " ";
+        for (int val : result) {
+            sb += val + " ";
+        }
+
+        System.out.println(sb.substring(0,sb.length()-1));
+
+    }
+
 }

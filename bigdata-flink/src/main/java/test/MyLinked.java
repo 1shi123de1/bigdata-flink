@@ -1,5 +1,8 @@
 package test;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * @ClassName MyLinked
  * @Description TODO 自己实现链表 , 需要实现的方法：
@@ -14,25 +17,30 @@ package test;
  * @Author ylqdh
  * @Date 2020/4/10 9:26
  */
-class MyNode<E> {
+class MyNode<E>{
     E data;
     MyNode<E> next = null;
-
-    MyNode() {
-
-    }
 
     MyNode (E data) {
         this.data = data;
     }
+
 }
-public class MyLinked<E> {
+public class MyLinked<E>{
     MyNode<E> head = null;
 
     // 初始化,在头结点的前面人为的添加了一个head，数据为?,下一个节点为null
     MyLinked () {
-        head = new MyNode();
+        head = new MyNode(0);
         head.next = null;
+    }
+
+    /**
+     *   返回链表的头结点，不是自己虚构的null，head.next才是链表的真正头结点
+     * @return
+     */
+    public MyNode getHead() {
+        return this.head.next;
     }
 
     /**
@@ -153,5 +161,145 @@ public class MyLinked<E> {
         }
         tmp.next = null;
         return true;
+    }
+
+    /**
+     *   反转链表
+     */
+    public void reverseLinked() {
+        MyNode preNode = null;
+        MyNode curNode = head.next;
+        MyNode nextNode = head.next.next;
+
+        while (nextNode != null) {
+            curNode.next = preNode;
+            preNode = curNode;
+            curNode = nextNode;
+            nextNode = nextNode.next;
+        }
+
+        // 最后要把链接上
+        curNode.next = preNode;
+
+        // head
+        head.next = curNode;
+    }
+
+    /**
+     *   检查链表是否有环
+     *      快指针和慢指针，快指针每次走两步，慢指针每次走一步，
+     *      有环的话，快指针会追上慢指针
+     * @return
+     */
+    public boolean isCircle() {
+        MyNode fast = head;
+        MyNode slow = head;
+
+        while (fast != null && slow != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+
+            if (fast == slow) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     *  把每次结点存进set集合中，如果有环的话，set存不进
+     * @return
+     */
+    public boolean isCircle2() {
+        Set<MyNode> set = new HashSet<>();
+
+        MyNode tmp = head;
+
+        while (tmp.next != null) {
+            if (set.contains(tmp)) {
+                return true;
+            } else {
+                set.add(tmp);
+                tmp = tmp.next;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     *   删除链表的倒数第n个结点,两次遍历法，先遍历一次得到链表的长度，再根据长度计算删除倒数第n个结点
+     * @param n  正整数n
+     * @return
+     */
+    public boolean delReverseNum(int n) {
+        int sum = this.size();
+
+        if (sum < n) {
+            System.out.println("输入的n不能大于链表长度...");
+            return false;
+        }
+        int i = 0;
+        MyNode<E> tmp = head.next;
+
+        while (i < sum - n - 1) {
+            tmp = tmp.next;
+            i++;
+        }
+
+        tmp.next = tmp.next.next;
+
+        return true;
+    }
+
+    /**
+     *   删除倒数第n个结点
+     *   先让fast指针先走n+1步；
+     *   然后两个指针一起走，当fast指针是null时，slow指针就是倒数第n个结点的前一个结点
+     *   此时，把slow的next指向改掉
+     * @param n
+     * @return
+     */
+    public boolean delReverNode(int n) {
+        MyNode<E> fast = head.next;
+        MyNode<E> slow = head.next;
+
+        for (int i = 0; i <= n ; i++) {
+            fast = fast.next;
+        }
+
+        while (fast != null) {
+            fast = fast.next;
+            slow = slow.next;
+        }
+
+        slow.next = slow.next.next;
+
+        return true;
+    }
+
+    /**
+     *  找链表的中间结点
+     * @return
+     */
+    public MyNode midNode () {
+        if (this.head.next == null) {
+            return null;
+        }
+        MyNode<E> slow = head.next;
+        MyNode<E> fast = head.next;
+
+        // 奇数时
+        while (fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+
+            // 偶数时
+            if (fast == null) {
+                break;
+            }
+        }
+
+        return slow;
     }
 }
